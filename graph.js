@@ -1,37 +1,88 @@
-let network;
-let currentData;
+class Graph {
+  constructor(data) {
+    this.nodes = data.nodes;
+    this.edges = data.edges;
+  }
 
-function drawGraph(data){
+  getNeighbors(id) {
+    return this.edges
+      .filter(e => e[0] === id || e[1] === id)
+      .map(e => (e[0] === id ? e[1] : e[0]));
+  }
 
-    currentData = data;
+  // 🔵 BFS shortest path
+  shortestPath(start, end) {
+    let queue = [[start]];
+    let visited = new Set();
 
-    const container =
-        document.getElementById("network");
+    while (queue.length) {
+      let path = queue.shift();
+      let node = path[path.length - 1];
 
-    const graphData = {
-        nodes:new vis.DataSet(data.nodes),
-        edges:new vis.DataSet(data.edges)
-    };
+      if (node === end) return path;
 
-    const options = {
+      if (!visited.has(node)) {
+        visited.add(node);
 
-        nodes:{
-            shape:"dot",
-            size:20,
-            font:{
-                size:18
-            }
-        },
-
-        physics:{
-            enabled:true
+        for (let n of this.getNeighbors(node)) {
+          queue.push([...path, n]);
         }
+      }
+    }
+
+    return [];
+  }
+
+  // 🔴 centrality (простий варіант)
+  centrality() {
+    return this.nodes.map(n => ({
+      id: n.id,
+      score: this.getNeighbors(n.id).length
+    })).sort((a, b) => b.score - a.score);
+  }
+
+  // 🟢 COMMUNITY (дуже простий кластер)
+  clusters() {
+    let visited = new Set();
+    let clusters = [];
+
+    const dfs = (node, cluster) => {
+      visited.add(node);
+      cluster.push(node);
+
+      for (let n of this.getNeighbors(node)) {
+        if (!visited.has(n)) dfs(n, cluster);
+      }
     };
 
-    network =
-        new vis.Network(
-            container,
-            graphData,
-            options
-        );
+    for (let n of this.nodes) {
+      if (!visited.has(n.id)) {
+        let cluster = [];
+        dfs(n.id, cluster);
+        clusters.push(cluster);
+      }
+    }
+
+    return clusters;
+  }
+
+  // 🤖 SIMPLE GNN (імітація)
+  // (реально спрощений message passing)
+  predictLoad() {
+    return this.nodes.map(n => {
+      let neigh = this.getNeighbors(n.id);
+
+      let avg = neigh.reduce((sum, id) => {
+        let node = this.nodes.find(x => x.id === id);
+        return sum + node.features[0];
+      }, 0) / (neigh.length || 1);
+
+      return {
+        id: n.id,
+        load: (n.features[0] * 0.6 + avg * 0.4).toFixed(2)
+      };
+    });
+  }
 }
+
+const graph = new Graph(GraphData);
