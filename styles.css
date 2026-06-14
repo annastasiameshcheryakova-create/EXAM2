@@ -1,0 +1,61 @@
+body{
+    margin:0;
+    padding:0;
+    font-family:Arial, sans-serif;
+    background:#f4f4f4;
+}
+
+header{
+    text-align:center;
+    padding:20px;
+    background:#1e3a8a;
+    color:white;
+}
+
+.controls{
+    text-align:center;
+    padding:20px;
+}
+
+button{
+    padding:12px 20px;
+    margin:10px;
+    border:none;
+    border-radius:8px;
+    background:#2563eb;
+    color:white;
+    cursor:pointer;
+    font-size:16px;
+}
+
+button:hover{
+    background:#1d4ed8;
+}
+
+#network{
+    width:90%;
+    height:500px;
+    margin:auto;
+    border:2px solid #ddd;
+    background:white;
+}
+
+.info{
+    width:90%;
+    margin:auto;
+}
+
+.results{
+    width:90%;
+    margin:30px auto;
+    background:white;
+    padding:20px;
+    border-radius:10px;
+}
+
+.card{
+    padding:10px;
+    margin:10px 0;
+    background:#e0f2fe;
+    border-left:5px solid #0284c7;
+}
