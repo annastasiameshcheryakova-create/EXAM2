@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Теорія графів та аналіз мереж</title>
+
+    <link rel="stylesheet" href="styles.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/vis-network@9.1.9/dist/vis-network.min.js"></script>
+</head>
+<body>
+
+<header>
+    <h1>Теорія графів</h1>
+    <p>Мережі та зв'язки в реальному світі</p>
+</header>
+
+<section class="controls">
+
+    <button onclick="showSocialGraph()">
+        Соціальна мережа
+    </button>
+
+    <button onclick="showTransportGraph()">
+        Транспортна система
+    </button>
+
+    <button onclick="analyzeGraph()">
+        Аналіз мережі
+    </button>
+
+</section>
+
+<section class="info">
+
+    <h2>Опис системи</h2>
+
+    <p id="description">
+        Оберіть тип мережі для візуалізації.
+    </p>
+
+</section>
+
+<section id="network"></section>
+
+<section class="results">
+
+    <h2>Результати аналізу</h2>
+
+    <div id="analysis">
+
+    </div>
+
+</section>
+
+<script src="data.js"></script>
+<script src="graph.js"></script>
+<script src="ui.js"></script>
+
+</body>
+</html>
