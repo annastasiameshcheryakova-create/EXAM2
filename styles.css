@@ -1,21 +1,199 @@
-body {
-  margin: 0;
-  overflow: hidden;
-  font-family: Arial;
+:root {
+    --bg-glass: rgba(20, 20, 35, 0.65);
+    --border-glass: rgba(255, 255, 255, 0.15);
+    --accent-pink: #ff66b2;
+    --accent-blue: #00f3ff;
+    --text-light: #f5f5fa;
+    --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-#ui {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  background: rgba(0,0,0,0.7);
-  color: white;
-  padding: 10px;
-  border-radius: 10px;
-  width: 250px;
-  z-index: 10;
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: var(--font-main);
+    background-color: #05050a;
+    color: var(--text-light);
 }
 
-canvas {
-  background: #111;
+#ar-container {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 1;
 }
+
+/* Загальний стиль UI панелей */
+.ui-panel {
+    position: absolute;
+    z-index: 10;
+    top: 20px;
+    bottom: 20px;
+    width: 320px;
+    background: var(--bg-glass);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border-glass);
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.left-panel { left: 20px; }
+.right-panel { right: 20px; }
+
+h2 {
+    font-size: 1.3rem;
+    margin: 0 0 10px 0;
+    color: var(--accent-blue);
+    border-bottom: 2px solid var(--border-glass);
+    padding-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+h3 {
+    font-size: 0.95rem;
+    margin: 0 0 8px 0;
+    color: var(--accent-pink);
+}
+
+.section {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 12px;
+}
+
+.scrollable {
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+/* Кнопки та інпути */
+.btn-group {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    margin-top: 5px;
+}
+
+.btn {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: var(--text-light);
+    padding: 8px 12px;
+    font-size: 0.85rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.btn.active {
+    background: var(--accent-pink);
+    box-shadow: 0 0 10px var(--accent-pink);
+}
+
+.action-btn { background: #28a745; }
+.action-btn:hover { background: #218838; }
+.reset-btn { background: #dc3545; }
+
+.dropdown, .input-field {
+    width: 100%;
+    padding: 8px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--border-glass);
+    color: white;
+    border-radius: 6px;
+    margin-bottom: 6px;
+    box-sizing: border-box;
+}
+
+/* Перемикач (Toggle) */
+.switch-container {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    gap: 10px;
+}
+
+.switch-container input { display: none; }
+
+.slider {
+    position: relative;
+    width: 40px;
+    height: 20px;
+    background-color: #ccc;
+    border-radius: 20px;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 14px;
+    width: 14px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    border-radius: 50%;
+    transition: .4s;
+}
+
+input:checked + .slider { background-color: var(--accent-pink); }
+input:checked + .slider:before { transform: translateX(20px); }
+
+/* AI Box */
+.ai-box {
+    font-size: 0.85rem;
+    line-height: 1.4;
+    color: #e0e0ff;
+    white-space: pre-line;
+}
+
+/* Таблиці та метрики */
+.stats-table {
+    width: 100%;
+    font-size: 0.85rem;
+    border-collapse: collapse;
+}
+
+.stats-table th, .stats-table td {
+    padding: 6px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    font-size: 0.85rem;
+}
+
+/* Спливаюче вікно інформації про вузол */
+.popup {
+    position: absolute;
+    z-index: 100;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 260px;
+    background: rgba(15, 15, 25, 0.9);
+    border: 2px solid var(--accent-blue);
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 0 25px rgba(0, 243, 255, 0.4);
+}
+
+.hidden { display: none !important; }
+.close-btn { width: 100%; margin-top: 10px; background: rgba(255,255,255,0.15); }
