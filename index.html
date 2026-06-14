@@ -1,30 +1,97 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-  <meta charset="UTF-8" />
-  <title>AR Graph Metro + GNN</title>
-  <link rel="stylesheet" href="styles.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Metro AR + AI</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.2.0/dist/tf.min.js"></script>
 </head>
 <body>
+    <div id="ar-container"></div>
 
-  <div id="ui">
-    <h1>Metro Graph AR</h1>
+    <div class="ui-panel left-panel">
+        <h2>🎛️ Панель керування</h2>
+        
+        <div class="section">
+            <h3>🕒 Режим часу</h3>
+            <div class="btn-group">
+                <button class="btn active" onclick="setTimeMode('morning')">Ранок</button>
+                <button class="btn" onclick="setTimeMode('day')">День</button>
+                <button class="btn" onclick="setTimeMode('evening')">Вечір</button>
+                <button class="btn" onclick="setTimeMode('night')">Ніч</button>
+            </div>
+        </div>
 
-    <button onclick="GraphUI.findPath()">Find shortest path</button>
-    <button onclick="GraphUI.showCentral()">Central nodes</button>
-    <button onclick="GraphUI.simulateLoad()">Simulate load</button>
+        <div class="section">
+            <h3>📍 Пошук маршруту</h3>
+            <select id="start-node" class="dropdown"></select>
+            <select id="end-node" class="dropdown"></select>
+            <div class="btn-group">
+                <button class="btn action-btn" onclick="findRoute()">Побудувати</button>
+                <button class="btn reset-btn" onclick="clearRoute()">Скинути</button>
+            </div>
+        </div>
 
-    <div id="info"></div>
-  </div>
+        <div class="section">
+            <h3>⚠️ Симулятор аварії</h3>
+            <label class="switch-container">
+                <input type="checkbox" id="accident-toggle" onchange="toggleAccident()">
+                <span class="slider"></span>
+                <span class="label-text">Аварія на центральній станції</span>
+            </label>
+        </div>
 
-  <canvas id="scene"></canvas>
+        <div class="section">
+            <h3>🛠️ Редактор графа</h3>
+            <input type="text" id="new-station-name" placeholder="Назва нової станції" class="input-field">
+            <button class="btn action-btn" onclick="addNewStation()">Додати станцію</button>
+        </div>
+    </div>
 
-  <!-- TensorFlow.js -->
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <div class="ui-panel right-panel">
+        <h2>📊 Аналітика системи</h2>
 
-  <script src="data.js"></script>
-  <script src="graph.js"></script>
-  <script src="ui.js"></script>
+        <div class="section scrollable">
+            <h3>🧠 Прогноз GNN & AI</h3>
+            <div id="ai-recommendations" class="ai-box">
+                Аналіз мережі запущено...
+            </div>
+        </div>
 
+        <div class="section">
+            <h3>⏱️ Порівняння алгоритмів</h3>
+            <table class="stats-table">
+                <tr><th>Алгоритм</th><th>Час (мс)</th></tr>
+                <tr><td>Dijkstra</td><td id="time-dijkstra">0.00</td></tr>
+                <tr><td>A* (Heuristic)</td><td id="time-astar">0.00</td></tr>
+                <tr><td>BFS</td><td id="time-bfs">0.00</td></tr>
+            </table>
+        </div>
+
+        <div class="section">
+            <h3>📈 Статистика графа</h3>
+            <div class="stats-grid">
+                <div>Вершин: <span id="stat-nodes">0</span></div>
+                <div>Ребер: <span id="stat-edges">0</span></div>
+                <div>Діаметр: <span id="stat-diameter">0</span></div>
+                <div>Щільність: <span id="stat-density">0</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="node-info-popup" class="popup hidden">
+        <h3 id="popup-title">Назва станції</h3>
+        <p>👥 Пасажиропотік: <span id="popup-flow">0</span> тис./год</p>
+        <p>🔄 Пересадки: <span id="popup-transfers">0</span></p>
+        <p>⚡ Статус: <span id="popup-status">Нормальний</span></p>
+        <button class="btn close-btn" onclick="closePopup()">Закрити</button>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="graph.js"></script>
+    <script src="ui.js"></script>
 </body>
 </html>
